@@ -1,0 +1,25 @@
+{
+  "baseline": {
+    "model": "deepset/deberta-v3-base-injection",
+    "accuracy": 0.6636,
+    "macro_f1": 0.6623,
+    "benign_recall": 0.5473,
+    "injection_recall": 0.8942,
+    "injection_f1": 0.6407
+  },
+  "qwen": {
+    "model": "qwen2-1.5b-qlora",
+    "accuracy": 0.9873,
+    "macro_f1": 0.9857,
+    "benign_recall": 0.9918,
+    "injection_recall": 0.9783,
+    "injection_f1": 0.981
+  },
+  "deltas": {
+    "accuracy": 0.3237,
+    "macro_f1": 0.3234,
+    "benign_recall": 0.4445,
+    "injection_recall": 0.0841,
+    "injection_f1": 0.3403
+  }
+}

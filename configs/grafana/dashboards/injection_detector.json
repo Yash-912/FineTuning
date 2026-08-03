@@ -1,0 +1,212 @@
+{
+  "__inputs": [],
+  "__requires": [],
+  "title": "Prompt Injection Detector",
+  "uid": "injection-detector",
+  "tags": ["injection", "guardrail"],
+  "timezone": "browser",
+  "time": { "from": "now-15m", "to": "now" },
+  "refresh": "5s",
+  "panels": [
+    {
+      "id": 1,
+      "title": "Request Rate",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 8, "x": 0, "y": 0 },
+      "targets": [
+        {
+          "expr": "rate(injection_requests_total[1m])",
+          "legendFormat": "requests/s"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "reqps",
+          "color": { "mode": "palette-classic" },
+          "custom": { "showPoints": "never", "lineInterpolation": "smooth" }
+        }
+      },
+      "description": "Total incoming requests per second"
+    },
+    {
+      "id": 2,
+      "title": "Blocked vs Flagged (cumulative)",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 8, "x": 8, "y": 0 },
+      "targets": [
+        {
+          "expr": "rate(injection_blocked_total[1m])",
+          "legendFormat": "blocked/s"
+        },
+        {
+          "expr": "rate(injection_flagged_total[1m])",
+          "legendFormat": "flagged/s"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "reqps",
+          "color": { "mode": "palette-classic" },
+          "custom": { "showPoints": { "mode": "never" }, "lineInterpolation": "smooth" }
+        }
+      },
+      "description": "Per-second rate of hard-blocked and soft-flagged requests"
+    },
+    {
+      "id": 3,
+      "title": "Confidence Score Heatmap",
+      "type": "heatmap",
+      "gridPos": { "h": 8, "w": 8, "x": 16, "y": 0 },
+      "targets": [
+        {
+          "expr": "sum(rate(injection_confidence_bucket[1m])) by (le)",
+          "format": "heatmap",
+          "legendFormat": "le {{le}}"
+        }
+      ],
+      "description": "Distribution of model confidence scores over time",
+      "heatmap": {
+        "yAxis": { "format": "none", "decimals": 2 },
+        "dataFormat": "timeseries_buckets"
+      },
+      "tooltip": { "show": true, "showHistogram": true }
+    },
+    {
+      "id": 4,
+      "title": "Latency Distribution (P50 / P99)",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 8, "x": 0, "y": 8 },
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.50, rate(injection_latency_seconds_bucket[1m]))",
+          "legendFormat": "P50"
+        },
+        {
+          "expr": "histogram_quantile(0.99, rate(injection_latency_seconds_bucket[1m]))",
+          "legendFormat": "P99"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s",
+          "color": { "mode": "palette-classic" },
+          "custom": { "showPoints": { "never": true }, "lineInterpolation": "smooth" }
+        }
+      },
+      "description": "Inference latency percentiles. Target: P50 < 50ms, P99 < 150ms.",
+      "thresholds": [
+        { "value": 0.05, "color": "green" },
+        { "value": 0.15, "color": "yellow", "fill": true },
+        { "value": 0.3, "color": "red", "fill": true }
+      ]
+    },
+    {
+      "id": 5,
+      "title": "Injection Rate (blocked+flagged / total)",
+      "type": "stat",
+      "gridPos": { "h": 4, "w": 4, "x": 8, "y": 8 },
+      "targets": [
+        {
+          "expr": "(sum(rate(injection_blocked_total[5m])) + sum(rate(injection_flagged_total[5m]))) / sum(rate(injection_requests_total[5m]))",
+          "legendFormat": "injection %"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit",
+          "color": { "mode": "thresholds" },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "value": null, "color": "green" },
+              { "value": 0.1, "color": "yellow" },
+              { "value": 0.5, "color": "red" }
+            ]
+          }
+        }
+      },
+      "description": "Percentage of all requests that trigger an injection detection",
+      "pluginVersion": "8.5.0"
+    },
+    {
+      "id": 6,
+      "title": "Model Status",
+      "type": "stat",
+      "gridPos": { "h": 4, "w": 4, "x": 12, "y": 8 },
+      "targets": [
+        {
+          "expr": "up{job=\"injection-detector\"}",
+          "legendFormat": "up"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "value": null, "color": "red" },
+              { "value": 1, "color": "green" }
+            ]
+          },
+          "mappings": [
+            { "type": "value", "value": "1", "text": "UP", "color": "green" },
+            { "type": "value", "value": "0", "text": "DOWN", "color": "red" }
+          ]
+        }
+      },
+      "description": "Prometheus target up/down status",
+      "pluginVersion": "8.5.0"
+    },
+    {
+      "id": 7,
+      "title": "Total Detections (cumulative)",
+      "type": "stat",
+      "gridPos": { "h": 4, "w": 4, "x": 16, "y": 8 },
+      "targets": [
+        {
+          "expr": "injection_blocked_total",
+          "legendFormat": "blocked"
+        },
+        {
+          "expr": "injection_flagged_total",
+          "legendFormat": "flagged"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none",
+          "color": { "mode": "palette-classic" }
+        }
+      },
+      "description": "Total blocked and flagged count since server start",
+      "pluginVersion": "8.5.0"
+    },
+    {
+      "id": 8,
+      "title": "Shadow Agreement Rate",
+      "type": "timeseries",
+      "gridPos": { "h": 6, "w": 12, "x": 0, "y": 12 },
+      "targets": [
+        {
+          "expr": "rate(injection_shadow_agreements_total[5m])",
+          "legendFormat": "agreements/s"
+        },
+        {
+          "expr": "rate(injection_shadow_disagreements_total[5m])",
+          "legendFormat": "disagreements/s"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "reqps",
+          "color": { "mode": "palette-classic" },
+          "custom": { "showPoints": "never", "lineInterpolation": "smooth" }
+        }
+      },
+      "description": "Shadow vs production model agreement rate. Spikes in disagreements signal potential drift."
+    }
+  ],
+  "schemaVersion": 36,
+  "version": 2
+}

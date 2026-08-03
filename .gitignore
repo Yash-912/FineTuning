@@ -6,9 +6,25 @@ __pycache__/
 *.egg-info/
 dist/
 build/
-data/raw/
-data/processed/
-*.parquet
-*.json
 venv/
-learning/
+
+# Data (generated)
+data/raw/
+data/processed/*.parquet
+data/processed/adversarial_eval.parquet
+
+# Environment
+.env
+
+# Review queue DB
+*.db
+
+# Model checkpoints (large binary files)
+models/**/checkpoint-*/
+models/**/*.safetensors
+models/**/*.bin
+
+# Temp files
+*.tmp
+*.temp
+*.log

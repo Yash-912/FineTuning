@@ -1,0 +1,80 @@
+{
+  "model": "qwen2-1.5b-qlora_adversarial",
+  "device": "cpu",
+  "temperature": 3.510381377353283,
+  "test_size": 47,
+  "accuracy": 0.8936,
+  "macro_f1": 0.6141,
+  "injection_recall": 0.9535,
+  "benign_recall": 0.25,
+  "benign": {
+    "precision": 0.3333,
+    "recall": 0.25,
+    "f1": 0.2857
+  },
+  "injection": {
+    "precision": 0.9318,
+    "recall": 0.9535,
+    "f1": 0.9425
+  },
+  "confusion_matrix": [
+    [
+      1,
+      3
+    ],
+    [
+      2,
+      41
+    ]
+  ],
+  "per_category": {
+    "base64": {
+      "n": 4,
+      "accuracy": 1.0
+    },
+    "benign_lookalike": {
+      "n": 4,
+      "accuracy": 0.25
+    },
+    "direct_injection": {
+      "n": 5,
+      "accuracy": 1.0
+    },
+    "few_shot": {
+      "n": 4,
+      "accuracy": 1.0
+    },
+    "hypothetical": {
+      "n": 4,
+      "accuracy": 0.75
+    },
+    "multi_lang": {
+      "n": 4,
+      "accuracy": 1.0
+    },
+    "payload_split": {
+      "n": 4,
+      "accuracy": 0.75
+    },
+    "roleplay_dan": {
+      "n": 5,
+      "accuracy": 1.0
+    },
+    "special_chars": {
+      "n": 3,
+      "accuracy": 1.0
+    },
+    "structured_data": {
+      "n": 3,
+      "accuracy": 1.0
+    },
+    "system_override": {
+      "n": 4,
+      "accuracy": 1.0
+    },
+    "token_smuggle": {
+      "n": 3,
+      "accuracy": 1.0
+    }
+  }
+}

@@ -19,7 +19,8 @@ from middleware.config import settings
 
 @pytest.fixture
 def client():
-    return TestClient(app)
+    with TestClient(app) as c:
+        yield c
 
 
 def test_health(client):
@@ -45,6 +46,9 @@ def test_metrics_present(client):
         "injection_flagged_total",
         "injection_confidence",
         "injection_latency_seconds",
+        "injection_shadow_agreements_total",
+        "injection_shadow_disagreements_total",
+        "injection_shadow_confidence_delta",
     ]:
         assert metric in response.text, f"Metric {metric} not found"
 
@@ -60,7 +64,7 @@ def test_no_messages(client):
 
 
 def test_benign_passthrough(client, monkeypatch):
-    monkeypatch.setattr(settings, "llm_endpoint", "https://httpbin.org/post")
+    monkeypatch.setattr(settings, "llm_endpoint", "https://httpbin.org/anything")
     monkeypatch.setattr(settings, "llm_api_key", "test-key")
 
     response = client.post(

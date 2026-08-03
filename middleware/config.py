@@ -15,6 +15,11 @@ class Settings(BaseSettings):
     host: str = "0.0.0.0"
     port: int = 8080
 
+    shadow_enabled: bool = False
+    shadow_model_path: str = ""
+    review_queue_path: str = "data/review_queue.db"
+    review_near_threshold: float = 0.1
+
     model_config = {"env_file": ".env", "env_file_encoding": "utf-8"}
 
 

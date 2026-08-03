@@ -1,0 +1,74 @@
+{
+  "model": "deepset/deberta-v3-base-injection",
+  "test_size": 2197,
+  "accuracy": 0.6636,
+  "macro_f1": 0.6623,
+  "roc_auc": 0.7643,
+  "benign": {
+    "precision": 0.9111,
+    "recall": 0.5473,
+    "f1": 0.6838
+  },
+  "injection": {
+    "precision": 0.4992,
+    "recall": 0.8942,
+    "f1": 0.6407
+  },
+  "confusion_matrix": [
+    [
+      799,
+      661
+    ],
+    [
+      78,
+      659
+    ]
+  ],
+  "per_source": {
+    "deepset": {
+      "n": 49,
+      "benign": 27,
+      "injection": 22,
+      "accuracy": 1.0,
+      "injection_precision": 1.0,
+      "injection_recall": 1.0,
+      "injection_f1": 1.0
+    },
+    "gandalf": {
+      "n": 34,
+      "benign": 0,
+      "injection": 34,
+      "accuracy": 0.9706,
+      "injection_precision": 1.0,
+      "injection_recall": 0.9706,
+      "injection_f1": 0.9851
+    },
+    "no_robots": {
+      "n": 868,
+      "benign": 868,
+      "injection": 0,
+      "accuracy": 0.2696,
+      "injection_precision": 0.0,
+      "injection_recall": 0.0,
+      "injection_f1": 0.0
+    },
+    "s_labs": {
+      "n": 1042,
+      "benign": 565,
+      "injection": 477,
+      "accuracy": 0.9031,
+      "injection_precision": 0.9372,
+      "injection_recall": 0.8449,
+      "injection_f1": 0.8886
+    },
+    "xtram1": {
+      "n": 204,
+      "benign": 0,
+      "injection": 204,
+      "accuracy": 0.9853,
+      "injection_precision": 1.0,
+      "injection_recall": 0.9853,
+      "injection_f1": 0.9926
+    }
+  }
+}

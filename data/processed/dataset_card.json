@@ -1,0 +1,114 @@
+{
+  "config": {
+    "sources": {
+      "deepset_prompt_injections": {
+        "enabled": true,
+        "hf_path": "deepset/prompt-injections",
+        "split": "train",
+        "label_map": null,
+        "injection_only": false,
+        "max_samples": null
+      },
+      "s_labs_prompt_injection": {
+        "enabled": true,
+        "hf_path": "S-Labs/prompt-injection-dataset",
+        "split": "train",
+        "label_map": null,
+        "injection_only": false,
+        "max_samples": null
+      },
+      "xtram1_safe_guard": {
+        "enabled": true,
+        "hf_path": "xTRam1/safe-guard-prompt-injection",
+        "split": "train",
+        "label_map": null,
+        "injection_only": true,
+        "max_samples": null
+      },
+      "gandalf_ignore_instructions": {
+        "enabled": true,
+        "hf_path": "Lakera/gandalf_ignore_instructions",
+        "split": "train",
+        "label_map": null,
+        "injection_only": true,
+        "max_samples": 350
+      },
+      "hackaprompt_submissions": {
+        "enabled": false,
+        "hf_path": "hackaprompt/hackaprompt-dataset",
+        "split": "submission_data",
+        "label_map": null,
+        "injection_only": true,
+        "max_samples": 800,
+        "filter_successful": true
+      },
+      "no_robots": {
+        "enabled": true,
+        "hf_path": "HuggingFaceH4/no_robots",
+        "split": "train",
+        "label_map": null,
+        "injection_only": false,
+        "max_samples": null
+      }
+    },
+    "processing": {
+      "near_dup_threshold": 0.92,
+      "embedding_model": "all-MiniLM-L6-v2",
+      "target_benign_to_injection_ratio": 2.0,
+      "batch_size": 1024
+    },
+    "split": {
+      "train_ratio": 0.8,
+      "val_ratio": 0.1,
+      "test_ratio": 0.1,
+      "stratify_by": "source",
+      "random_seed": 42
+    },
+    "output": {
+      "dir": "data/processed",
+      "format": "parquet",
+      "adversarial_eval_path": "data/processed/adversarial_eval.parquet",
+      "dataset_card_path": "data/processed/dataset_card.json"
+    }
+  },
+  "per_source_before_dedup": {
+    "deepset_prompt_injections": {
+      "count": 546,
+      "benign": 343,
+      "injection": 203
+    },
+    "s_labs_prompt_injection": {
+      "count": 11089,
+      "benign": 6303,
+      "injection": 4786
+    },
+    "xtram1_safe_guard": {
+      "count": 2496,
+      "benign": 0,
+      "injection": 2496
+    },
+    "gandalf_ignore_instructions": {
+      "count": 350,
+      "benign": 0,
+      "injection": 350
+    },
+    "no_robots": {
+      "count": 9500,
+      "benign": 9500,
+      "injection": 0
+    }
+  },
+  "final_counts": {
+    "total": 21963,
+    "benign": 14642,
+    "injection": 7321,
+    "train": 17570,
+    "val": 2196,
+    "test": 2197
+  },
+  "class_balance": {
+    "benign": 14642,
+    "injection": 7321,
+    "ratio": 2.0
+  }
+}
